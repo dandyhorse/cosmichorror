@@ -1,0 +1,78 @@
+[gd_scene load_steps=12 format=3 uid="uid://ckhokegemojqj"]
+
+[ext_resource type="Script" path="res://scenes/man/man.gd" id="1_416tr"]
+[ext_resource type="Texture2D" uid="uid://cbg0gtgexecj0" path="res://sprites/man.png" id="1_bxnmb"]
+[ext_resource type="Script" path="res://scenes/man/PlayerCamera.gd" id="3_4ewpk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uwiw3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8bjb"]
+atlas = ExtResource("1_bxnmb")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j2s72"]
+atlas = ExtResource("1_bxnmb")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbjf0"]
+atlas = ExtResource("1_bxnmb")
+region = Rect2(64, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhxrb"]
+atlas = ExtResource("1_bxnmb")
+region = Rect2(128, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bhxr"]
+atlas = ExtResource("1_bxnmb")
+region = Rect2(192, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jwfj"]
+atlas = ExtResource("1_bxnmb")
+region = Rect2(256, 0, 64, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tc8jd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8bjb")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j2s72")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbjf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhxrb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bhxr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2jwfj")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 15.0
+}]
+
+[node name="Man" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_416tr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_uwiw3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_tc8jd")
+animation = &"walk"
+
+[node name="PlayerCamera" type="Camera2D" parent="."]
+script = ExtResource("3_4ewpk")
