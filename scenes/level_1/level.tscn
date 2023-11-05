@@ -1,11 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://vncq7rb37k4p"]
+[gd_scene load_steps=4 format=3 uid="uid://vncq7rb37k4p"]
 
+[ext_resource type="Texture2D" uid="uid://cmsc3swuqod3l" path="res://sprites/measure.jpg" id="1_25f26"]
 [ext_resource type="PackedScene" uid="uid://ckhokegemojqj" path="res://scenes/man/man.tscn" id="1_38kyg"]
 [ext_resource type="Texture2D" uid="uid://c1sdpahy1roe7" path="res://sprites/grass.jpg" id="1_cydwf"]
 
 [node name="level" type="Node2D"]
 
+[node name="Measuring" type="Sprite2D" parent="."]
+texture = ExtResource("1_25f26")
+
 [node name="Grass" type="Sprite2D" parent="."]
+visible = false
 texture_filter = 1
 texture = ExtResource("1_cydwf")
 
