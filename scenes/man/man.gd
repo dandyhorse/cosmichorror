@@ -48,7 +48,6 @@ func MovementLoop(delta) -> void:
 			currentSpeed = ACELERATED_SPEED
 		isCrouching:
 			currentSpeed = CROUCH_SPEED
-			
 		_:
 			currentSpeed = SPEED;
 
@@ -56,55 +55,55 @@ func MovementLoop(delta) -> void:
 	
 	realVelocity = get_real_velocity()
 	
+	# Position or Global Position ?
 	var direction = Vector2(direction_x, direction_y).normalized()
 	var mouse_position = get_global_mouse_position()
-	var angle = direction.angle_to(mouse_position - position)
-	
-#	print(direction.angle_to(mouse_position - position))
-	
-	var defaultRotation = rotator.rotation;
-	var isForwardDirection = false;
+	var angle = direction.angle_to(mouse_position - global_position)
 	
 	if (realVelocity != Vector2.ZERO):
-#		legs.play("walk")
+		print(direction)
 		if abs(angle) < PI / 4:
-#			rotator.rotation = 3 * PI / 2
-			isForwardDirection = true;
+			if direction.x > 0 && direction.y == 0:
+				rotator.rotation = 2 * PI
+			elif direction.x < 0 && direction.y == 0:
+				rotator.rotation = PI
+			if direction.y > 0 && direction.x == 0:
+				rotator.rotation = PI / 2
+			elif direction.y < 0 && direction.x == 0:
+				rotator.rotation = 3 * PI / 2
 			legs.play("walk")
 		elif abs(angle) > 3 * PI / 4:
-			isForwardDirection = false;
 			legs.play_backwards("walk")
 		elif angle > 0:
 			#left
-			isForwardDirection = false;
-			legs.play("idle")			
+			legs.play("idle")
 		else:
 			#right
-			isForwardDirection = false;
 			legs.play("idle")
 	else: 
 		legs.play("idle")
 		
-	if (Input.is_action_pressed("up")):
-		if isForwardDirection:
-			rotator.rotation = 3 * PI / 2
-		else:
-			rotator.rotation = PI / 2
-	if (Input.is_action_pressed("down")):
-		if isForwardDirection:
-			rotator.rotation = PI / 2
-		else:
-			rotator.rotation = 3 * PI / 2
-	if (Input.is_action_pressed("right")):
-		if isForwardDirection:
-			rotator.rotation = 2 * PI
-		else:
-			rotator.rotation =  PI
-	if (Input.is_action_pressed("left")):
-		if isForwardDirection: 
-			rotator.rotation = PI
-		else:
-			rotator.rotation = 2 * PI
+# Noobie prog level:
+#	if (Input.is_action_pressed("up")):
+#		if isForwardDirection:
+#			rotator.rotation = 3 * PI / 2
+#		else:
+#			rotator.rotation = PI / 2
+#	if (Input.is_action_pressed("down")):
+#		if isForwardDirection:
+#			rotator.rotation = PI / 2
+#		else:
+#			rotator.rotation = 3 * PI / 2
+#	if (Input.is_action_pressed("right")):
+#		if isForwardDirection:
+#			rotator.rotation = 2 * PI
+#		else:
+#			rotator.rotation =  PI
+#	if (Input.is_action_pressed("left")):
+#		if isForwardDirection: 
+#			rotator.rotation = PI
+#		else:
+#			rotator.rotation = 2 * PI
 
 # Legs Rotation: 
 #	var rotation = 0.0
