@@ -4,6 +4,7 @@ extends CharacterBody2D
 @onready var cam = $PlayerCamera
 @onready var legs = $Rotator/AnimatedSprite2D
 @onready var rotator = $Rotator
+@onready var bodyRotator = $BodyRotator
 var realVelocity = Vector2.ZERO
 var zoom_step = 0.5
 
@@ -24,12 +25,13 @@ const max_rotation = 0.5
 func _process(delta: float) -> void:
 	var mouse_position = get_local_mouse_position()
 	cam.position = lerp(Vector2(),mouse_position.normalized() * max_cam_dist, mouse_position.length() / max_mouse_radius)
-	look_at(get_global_mouse_position())
+	bodyRotator.look_at(get_global_mouse_position())
+#	look_at(get_global_mouse_position())
+	
 
 
 func _physics_process(delta):
 	
-	print(get_global_mouse_position())
 	MovementLoop(delta)
 	move_and_slide()
 
@@ -40,7 +42,6 @@ func MovementLoop(delta) -> void:
 	var isRunning = Input.is_action_pressed("run");
 	var isCrouching = Input.is_action_pressed("crouch");	
 	var isMoving = realVelocity != Vector2.ZERO;
-	print()
 	
 	match true:
 		isRunning:
@@ -55,29 +56,73 @@ func MovementLoop(delta) -> void:
 	
 	realVelocity = get_real_velocity()
 	
-	legs.play("walk")
+	var direction = Vector2(direction_x, direction_y).normalized()
+	var mouse_position = get_global_mouse_position()
+	var angle = direction.angle_to(mouse_position - position)
+	
+#	print(direction.angle_to(mouse_position - position))
+	
+	var defaultRotation = rotator.rotation;
+	var isForwardDirection = false;
+	
 	if (realVelocity != Vector2.ZERO):
-		legs.play("walk")
+#		legs.play("walk")
+		if abs(angle) < PI / 4:
+#			rotator.rotation = 3 * PI / 2
+			isForwardDirection = true;
+			legs.play("walk")
+		elif abs(angle) > 3 * PI / 4:
+			isForwardDirection = false;
+			legs.play_backwards("walk")
+		elif angle > 0:
+			#left
+			isForwardDirection = false;
+			legs.play("idle")			
+		else:
+			#right
+			isForwardDirection = false;
+			legs.play("idle")
 	else: 
 		legs.play("idle")
+		
+	if (Input.is_action_pressed("up")):
+		if isForwardDirection:
+			rotator.rotation = 3 * PI / 2
+		else:
+			rotator.rotation = PI / 2
+	if (Input.is_action_pressed("down")):
+		if isForwardDirection:
+			rotator.rotation = PI / 2
+		else:
+			rotator.rotation = 3 * PI / 2
+	if (Input.is_action_pressed("right")):
+		if isForwardDirection:
+			rotator.rotation = 2 * PI
+		else:
+			rotator.rotation =  PI
+	if (Input.is_action_pressed("left")):
+		if isForwardDirection: 
+			rotator.rotation = PI
+		else:
+			rotator.rotation = 2 * PI
 
 # Legs Rotation: 
-	var rotation = 0.0
-
-	if Input.is_action_pressed("left"):
-		rotation = -rotation_speed
-	elif Input.is_action_pressed("right"):
-		rotation = rotation_speed
-
-	rotator.rotation += rotation * delta
-
-	if rotator.rotation < min_rotation:
-		rotator.rotation = min_rotation
-	elif rotator.rotation > max_rotation:
-		rotator.rotation = max_rotation
-
-	if rotation == 0.0:
-		rotator.rotation = 0.0
+#	var rotation = 0.0
+#
+#	if Input.is_action_pressed("left"):
+#		rotation = -rotation_speed
+#	elif Input.is_action_pressed("right"):
+#		rotation = rotation_speed
+#
+#	rotator.rotation += rotation * delta
+#
+#	if rotator.rotation < min_rotation:
+#		rotator.rotation = min_rotation
+#	elif rotator.rotation > max_rotation:
+#		rotator.rotation = max_rotation
+#
+#	if rotation == 0.0:
+#		rotator.rotation = 0.0
 	
 	
 func changeCameraZoom(zoom_step: float) -> void:

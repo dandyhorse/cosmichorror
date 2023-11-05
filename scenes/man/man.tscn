@@ -152,7 +152,6 @@ script = ExtResource("3_4ewpk")
 shape = SubResource("RectangleShape2D_uwiw3")
 
 [node name="Rotator" type="Marker2D" parent="."]
-scale = Vector2(1.00257, 1.00603)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Rotator"]
 texture_filter = 1
@@ -161,7 +160,9 @@ rotation = 1.5708
 sprite_frames = SubResource("SpriteFrames_tc8jd")
 animation = &"walk"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="BodyRotator" type="Marker2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="BodyRotator"]
 texture_filter = 1
 rotation = 1.5708
 texture = ExtResource("2_707gs")
